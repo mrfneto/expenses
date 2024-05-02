@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type='month']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: brightness(0) invert(1);
+}
