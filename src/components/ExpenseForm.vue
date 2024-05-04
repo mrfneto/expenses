@@ -1,7 +1,12 @@
 <script setup>
 import { ref, watch } from 'vue'
+
+import { Trash } from './icons'
+import { showModal } from '../services/modalService'
+
 import ModalForm from './shareds/ModalForm.vue'
 import Input from './shareds/Input.vue'
+import Button from './shareds/Button.vue'
 
 const props = defineProps({
   item: {
@@ -18,12 +23,22 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['save', 'close'])
+const emit = defineEmits(['save', 'close', 'remove'])
 
 const item = ref({})
 
 const save = () => {
   emit('save', item.value)
+}
+
+const remove = async () => {
+  const useConfirmed = await showModal(
+    'Tem certeza de que deseja excluir esta despesa?'
+  )
+
+  if (useConfirmed) {
+    emit('remove', item.value)
+  }
 }
 
 const close = () => {
@@ -84,6 +99,13 @@ watch(
       required
       min="0"
       step="0.01"
+      class="mb-4"
     />
+
+    <div class="flex items-center justify-center" v-show="item.id">
+      <Button type="button" icon variant="danger" size="sm" @click="remove">
+        <Trash class="w-4 h-4" />
+      </Button>
+    </div>
   </ModalForm>
 </template>
